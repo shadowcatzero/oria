@@ -1,0 +1,20 @@
+{
+  "item.oria.orium_shard": "Orium Shard",
+  "item.oria.spatial_orb": "Spatial Orb",
+  "item.oria.spatial_orb.tooltip.filled": "Filled - %s",
+  "item.oria.spatial_orb.tooltip.empty": "Empty",
+  "item.oria.spatial_orb.tooltip.name": "Name: %s",
+  "item.oria.spatial_orb.tooltip.tamed": "Tamed",
+  "item.oria.soul_orb": "Soul Orb",
+  "item.oria.skill_book": "Skill Book",
+  "item.oria.rat_tail": "Rat Tail",
+
+  "item.oria.rat_spawn_egg": "Rat Spawn Egg",
+
+  "block.oria.orium_ore": "Orium Ore",
+  "block.oria.ignis_flower": "Ignis Flower",
+
+  "itemGroup.oria.oria_items": "Oria Items",
+
+  "magic.oria.not_enough_mana": "Not enough mana"
+}
