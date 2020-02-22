@@ -11,4 +11,6 @@ interface OriaBlock : OriaObjectInfo {
     val itemSettings: Item.Settings?
 
     fun tooltip(name: String, vararg args: Any) = TranslatableText(key("tooltip.$name"), *args)
+    
+    fun clientInit() {}
 }

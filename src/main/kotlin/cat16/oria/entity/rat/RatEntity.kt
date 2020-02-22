@@ -17,7 +17,7 @@ import net.minecraft.world.World
 
 class RatEntity(type: EntityType<RatEntity>, world: World) : AnimalEntity(type, world) {
 
-    companion object: OriaEntityInfo {
+    companion object : OriaEntityInfo {
         override val oriaName: String = "rat"
         override val dimensions: EntityDimensions = EntityDimensions.fixed(0.3f, 0.2f)
         override val category: EntityCategory = EntityCategory.CREATURE
@@ -31,14 +31,10 @@ class RatEntity(type: EntityType<RatEntity>, world: World) : AnimalEntity(type, 
 
     override fun initGoals() {
         goalSelector.add(0, SwimGoal(this))
-        goalSelector.add(4, MeleeAttackGoal(this, 0.7, true))
-        goalSelector.add(5, WanderAroundFarGoal(this, 0.4))
-        goalSelector.add(
-            6, LookAtEntityGoal(
-                this,
-                PlayerEntity::class.java, 6.0f
-            )
-        )
+        goalSelector.add(1, MeleeAttackGoal(this, 0.7, true))
+        goalSelector.add(2, EscapeDangerGoal(this, 0.7))
+        goalSelector.add(3, WanderAroundFarGoal(this, 0.4))
+        goalSelector.add(4, LookAtEntityGoal(this, PlayerEntity::class.java, 6.0f))
         goalSelector.add(7, LookAroundGoal(this))
 
         targetSelector.add(1, RevengeGoal(this, *arrayOfNulls(0)).setGroupRevenge())

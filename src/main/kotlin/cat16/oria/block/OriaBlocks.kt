@@ -63,4 +63,8 @@ object OriaBlocks {
         blockItemPairs.add(Pair(block, null))
         return block
     }
+
+    fun clientInit() {
+        blockItemPairs.forEach { pair -> (pair.first as OriaBlock).clientInit() }
+    }
 }

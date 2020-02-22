@@ -2,6 +2,7 @@ package cat16.oria
 
 import cat16.oria.block.OriaBlocks
 import cat16.oria.component.OriaComponents
+import cat16.oria.entity.OriaEntities
 import cat16.oria.item.OriaItems
 import cat16.oria.network.OriaPackets
 import cat16.oria.world.OriaBiomeHandler
@@ -15,9 +16,10 @@ object Oria : ModInitializer {
     override fun onInitialize() {
         OriaItems.init()
         OriaBlocks.init()
+        OriaEntities.init()
         OriaItemGroups.init()
         OriaBiomeHandler.init()
-        OriaPackets.init()
+        OriaPackets.clientInit()
         OriaComponents.init()
     }
 

@@ -5,10 +5,8 @@ import cat16.oria.entity.rat.RatEntity
 import cat16.oria.entity.rat.RatRenderer
 import cat16.oria.entity.tntMinion.TntMinionEntity
 import cat16.oria.entity.tntMinion.TntMinionRenderer
-import net.fabricmc.fabric.api.biomes.v1.OverworldBiomes
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
-import net.fabricmc.fabric.impl.biome.InternalBiomeData
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.EntityRenderer
 import net.minecraft.entity.Entity
@@ -30,12 +28,15 @@ object OriaEntities {
 
 
     fun init() {
-        types.forEach{type -> EntityRendererRegistry.INSTANCE.register(type.first) {dispatcher, _ -> type.second(dispatcher) } }
         Registry.BIOME.forEach { biome ->
             run {
                 biome.getEntitySpawnList(EntityCategory.CREATURE).add(Biome.SpawnEntry(RAT, 50, 1, 2))
             }
         }
+    }
+
+    fun clientInit() {
+        types.forEach{type -> EntityRendererRegistry.INSTANCE.register(type.first) {dispatcher, _ -> type.second(dispatcher) } }
     }
 
     private fun <E> register(factory: (EntityType<E>, World) -> E, info: OriaEntityInfo, renderer: (EntityRenderDispatcher) -> EntityRenderer<*>) : EntityType<E> where E : Entity {

@@ -25,7 +25,7 @@ open class MagicFlowerBlock(
         FabricBlockSettings.of(Material.PLANT).noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).build()
     )
 
-    init {
+    override fun clientInit() {
         BlockRenderLayerMap.INSTANCE.putBlock(this, RenderLayer.getCutout())
     }
 

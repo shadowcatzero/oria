@@ -8,11 +8,11 @@
     "WorldMixin",
     "ServerPlayerEntityMixin",
     "HorseBaseEntityMixin",
-    "InGameHudMixin",
     "MobEntityMixin",
     "PlayerEntityMixin"
   ],
   "client": [
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
