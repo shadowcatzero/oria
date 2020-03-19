@@ -1,10 +1,12 @@
 package cat16.oria.entity
 
 import cat16.oria.Oria
+import cat16.oria.entity.bomb.BombEntity
+import cat16.oria.entity.bomb.BombEntityRenderer
 import cat16.oria.entity.rat.RatEntity
-import cat16.oria.entity.rat.RatRenderer
+import cat16.oria.entity.rat.RatEntityRenderer
 import cat16.oria.entity.tntMinion.TntMinionEntity
-import cat16.oria.entity.tntMinion.TntMinionRenderer
+import cat16.oria.entity.tntMinion.TntMinionEntityRenderer
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
 import net.minecraft.client.render.entity.EntityRenderDispatcher
@@ -22,8 +24,9 @@ object OriaEntities {
 
 
 
-    val RAT = register(::RatEntity, RatEntity.Companion, ::RatRenderer)
-    val TNT_MINION = register(::TntMinionEntity, TntMinionEntity.Companion, ::TntMinionRenderer)
+    val RAT = register(::RatEntity, RatEntity.Companion, ::RatEntityRenderer)
+    val TNT_MINION = register(::TntMinionEntity, TntMinionEntity.Companion, ::TntMinionEntityRenderer)
+    val BOMB = register(::BombEntity, BombEntity.Companion, ::BombEntityRenderer)
 
 
 

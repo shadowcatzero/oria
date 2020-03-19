@@ -16,7 +16,7 @@ object OriaWorld {
                     item.tick(
                         stack,
                         blockEntity.world!!,
-                        Vec3d(blockEntity.pos).add(0.5, 1.0, 0.5)
+                        Vec3d.method_24954(blockEntity.pos).add(0.5, 1.0, 0.5)
                     )
                 }
             }

@@ -6,8 +6,8 @@ import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.math.Vec3d
 
 object OriaServerPlayerEntity {

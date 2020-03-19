@@ -34,14 +34,14 @@ open class TntMinionEntity(type: EntityType<TntMinionEntity>, world: World) : Ta
     override fun initGoals() {
         goalSelector.add(0, SwimGoal(this))
         goalSelector.add(1, EscapeDangerGoal(this, 0.5))
-        goalSelector.add(5, WanderAroundFarGoal(this, 0.3))
+        goalSelector.add(2, WanderAroundFarGoal(this, 0.3))
         goalSelector.add(
-            6, LookAtEntityGoal(
+            3, LookAtEntityGoal(
                 this,
                 PlayerEntity::class.java, 6.0f
             )
         )
-        goalSelector.add(7, LookAroundGoal(this))
+        goalSelector.add(4, LookAroundGoal(this))
     }
 
 }

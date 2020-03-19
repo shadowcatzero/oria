@@ -15,7 +15,7 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
 import net.minecraft.world.World
 
-class RatEntity(type: EntityType<RatEntity>, world: World) : AnimalEntity(type, world) {
+open class RatEntity(type: EntityType<RatEntity>, world: World) : AnimalEntity(type, world) {
 
     companion object : OriaEntityInfo {
         override val oriaName: String = "rat"
@@ -35,7 +35,7 @@ class RatEntity(type: EntityType<RatEntity>, world: World) : AnimalEntity(type, 
         goalSelector.add(2, EscapeDangerGoal(this, 0.7))
         goalSelector.add(3, WanderAroundFarGoal(this, 0.4))
         goalSelector.add(4, LookAtEntityGoal(this, PlayerEntity::class.java, 6.0f))
-        goalSelector.add(7, LookAroundGoal(this))
+        goalSelector.add(5, LookAroundGoal(this))
 
         targetSelector.add(1, RevengeGoal(this, *arrayOfNulls(0)).setGroupRevenge())
     }
