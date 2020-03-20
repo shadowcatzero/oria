@@ -20,18 +20,36 @@ object OriaPackets {
     val BREAK_SOUL_ORB_PACKET_ID = packet("soul_orb_break")
     @JvmField
     val REMOVE_CURSOR_STACK_PACKET_ID = packet("cursor_stack_remove")
+    @JvmField
+    val ENTITY_SPAWN_PACKET = packet("entity_spawn")
 
     fun clientInit() {
-        ClientSidePacketRegistry.INSTANCE.register(
-            OriaPackets.BREAK_SOUL_ORB_PACKET_ID
-        ) { context: PacketContext, data: PacketByteBuf ->
+        register(BREAK_SOUL_ORB_PACKET_ID) { context: PacketContext, data: PacketByteBuf ->
             val x = data.readDouble()
             val y = data.readDouble()
             val z = data.readDouble()
             val pos = Vec3d(x, y, z)
             val player = context.player
-            player.world.playSound(pos.x, pos.y, pos.z, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.HOSTILE, 1f, 1f, true)
-            player.world.playSound(pos.x, pos.y, pos.z, SpatialOrbItem.RELEASE_SOUND, SoundCategory.HOSTILE, 1f, 1f, true)
+            player.world.playSound(
+                pos.x,
+                pos.y,
+                pos.z,
+                SoundEvents.BLOCK_GLASS_BREAK,
+                SoundCategory.HOSTILE,
+                1f,
+                1f,
+                true
+            )
+            player.world.playSound(
+                pos.x,
+                pos.y,
+                pos.z,
+                SpatialOrbItem.RELEASE_SOUND,
+                SoundCategory.HOSTILE,
+                1f,
+                1f,
+                true
+            )
             for (i in 0..9) {
                 player.world.addParticle(
                     ItemStackParticleEffect(ParticleTypes.ITEM, ItemStack(OriaItems.SPATIAL_ORB)),
@@ -39,9 +57,10 @@ object OriaPackets {
                 )
             }
         }
-        ClientSidePacketRegistry.INSTANCE.register(
-            OriaPackets.REMOVE_CURSOR_STACK_PACKET_ID
-        ) { context: PacketContext, data: PacketByteBuf? -> context.player.inventory.cursorStack = ItemStack.EMPTY }
+        register(REMOVE_CURSOR_STACK_PACKET_ID) { context: PacketContext, _: PacketByteBuf? ->
+            context.player.inventory.cursorStack = ItemStack.EMPTY
+        }
+        EntityPacket.client_RegisterEntityPacket(ENTITY_SPAWN_PACKET)
     }
 
     private fun randomVel(scale: Double): Double {
@@ -50,5 +69,9 @@ object OriaPackets {
 
     private fun packet(name: String): Identifier {
         return id(name)
+    }
+
+    private fun register(id: Identifier, consumer: (PacketContext, PacketByteBuf) -> Unit) {
+        ClientSidePacketRegistry.INSTANCE.register(id, consumer)
     }
 }

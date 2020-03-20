@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin implements OriaInGameHud.Interface {
+class InGameHudMixin implements OriaInGameHud.Interface {
 
     @Shadow @Final private MinecraftClient client;
 

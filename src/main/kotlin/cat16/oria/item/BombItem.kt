@@ -23,10 +23,10 @@ class BombItem(settings: Settings) : Item(settings), OriaItem {
             user.x,
             user.y,
             user.z,
-            SoundEvents.ENTITY_PIG_AMBIENT,
+            SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
             SoundCategory.PLAYERS,
             0.5f,
-            0.4f / (RANDOM.nextFloat() * 0.4f + 0.8f)
+            1f / (RANDOM.nextFloat() * 0.4f + 0.8f)
         )
 
         if (!world.isClient) {
