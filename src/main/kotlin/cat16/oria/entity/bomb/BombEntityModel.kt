@@ -6,11 +6,10 @@ import net.minecraft.client.render.entity.model.CompositeEntityModel
 
 class BombEntityModel<T> : CompositeEntityModel<T>() where T : BombEntity {
     private val shell: ModelPart
-    //private val fuse: ModelPart
 
     init {
-        textureWidth = 64
-        textureHeight = 64
+        textureWidth = 32
+        textureHeight = 32
 
         shell = ModelPart(this)
  		shell.setPivot(0.0F, 3.0F, 0.0F);

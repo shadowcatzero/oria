@@ -9,8 +9,8 @@ object OriaWorld {
     fun onTick(blockEntity: BlockEntity) {
         if (blockEntity is Inventory) {
             val inv = blockEntity as Inventory
-            for (i in 0 until inv.invSize) {
-                val stack = inv.getInvStack(i)
+            for (i in 0 until inv.size()) {
+                val stack = inv.getStack(i)
                 val item = stack.item
                 if (item is SpatialOrbItem) {
                     item.tick(

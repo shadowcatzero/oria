@@ -3,6 +3,7 @@
   "package": "cat16.oria.jMixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DefaultAttributeRegistryMixin",
     "ServerWorldAccessor",
     "ItemEntityMixin",
     "WorldMixin",

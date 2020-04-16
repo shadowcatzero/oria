@@ -48,15 +48,15 @@ class SpatialOrbItem(settings: Settings?) : Item(settings), OriaItem {
         return if (!hasEntity(orb) && player.isSneaking) {
             val entityHealth = entity.health
             val manaManager = OriaComponents.MAGIC.get(ComponentProvider.fromEntity(player)).manaManager
-            if (manaManager.mana >= entityHealth) {
-                manaManager.mana -= entityHealth
+            if (manaManager.mana >= entityHealth || player.isCreative) {
+                if (!player.isCreative) manaManager.mana -= entityHealth
                 val tag = orb.orCreateTag
                 tag.put("entity", entity.toTag(CompoundTag()))
                 tag.putInt("typeId", Registry.ENTITY_TYPE.getRawId(entity.type))
                 entity.remove()
                 player.playSound(FILL_SOUND, 1.0f, 1.0f)
             } else {
-                player.addMessage(Oria.text("magic", "not_enough_mana"), true)
+                player.sendMessage(Oria.text("magic", "not_enough_mana"), true)
             }
             true
         } else false
@@ -121,7 +121,7 @@ class SpatialOrbItem(settings: Settings?) : Item(settings), OriaItem {
         if (!world.isClient() && hasEntity(stack)) {
             val e = getEntity(stack, world)!!
             if (!(e is TameableEntity && e.isTamed)) {
-                val attackInstance = e.getAttributeInstance(EntityAttributes.ATTACK_DAMAGE)
+                val attackInstance = e.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
                 if (attackInstance != null) {
                     var damage = ceil(attackInstance.value).toInt()
                     if (damage > 0) {

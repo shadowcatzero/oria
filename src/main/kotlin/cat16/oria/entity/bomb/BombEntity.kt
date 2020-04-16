@@ -6,10 +6,13 @@ import cat16.oria.item.component.FuseItem
 import cat16.oria.network.EntityPacket
 import cat16.oria.network.OriaPackets
 import net.minecraft.entity.*
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.Packet
 import net.minecraft.particle.ParticleTypes
+import net.minecraft.predicate.entity.EntityPredicates
 import net.minecraft.util.math.MathHelper
+import net.minecraft.world.GameRules
 import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
 
@@ -18,7 +21,21 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
 
     var rollDistance = 0f;
 
+    var fuse: String? = null
+
+    var ticks: Int = 0
+
     constructor(world: World) : this(OriaEntities.BOMB, world)
+
+    init {
+        // TODO: inanimate = true
+    }
+
+    companion object : OriaEntityInfo {
+        override val oriaName: String = "bomb"
+        override val dimensions: EntityDimensions = EntityDimensions.fixed(0.4f, 0.4f)
+        override val category: EntityCategory = EntityCategory.MISC
+    }
 
     fun launchFrom(
         user: Entity,
@@ -40,36 +57,14 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
         this.pitch = pitch
     }
 
-    init {
-        inanimate = true
-    }
-
-    companion object : OriaEntityInfo {
-        override val oriaName: String = "bomb"
-        override val dimensions: EntityDimensions = EntityDimensions.fixed(0.4f, 0.4f)
-        override val category: EntityCategory = EntityCategory.MISC
-    }
-
-    var fuse: String? = null
-
-    var ticks: Int = 0
-
     override fun tick() {
 
-        if (!hasNoGravity()) {
-            velocity = velocity.add(0.0, -0.07, 0.0)
-        }
-
-        if (onGround) {
-            velocity = velocity.multiply(0.95, 1.0, 0.95)
-        }
-
-        move(MovementType.SELF, velocity)
+        tickMovement()
 
         if(onGround) rollDistance += velocity.length().toFloat()
         if(velocity.length() != 0.0) yaw = (MathHelper.atan2(velocity.x, velocity.z) * 57.2957763671875).toFloat()
 
-        ticks++
+        if(fuse != null) ticks++
 
         if (FuseItem.getCondition(fuse).invoke(this)) {
             this.remove()
@@ -84,6 +79,81 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
         }
     }
 
+    open fun tickMovement() {
+
+        if (!hasNoGravity()) {
+            velocity = velocity.add(0.0, -0.07, 0.0)
+        }
+
+        if (onGround) {
+            velocity = velocity.multiply(0.95, 1.0, 0.95)
+        }
+
+        /*
+        var xVel = velocity.x
+        var yVel = velocity.y
+        var zVel = velocity.z
+        if (xVel < 0.003) {
+            xVel = 0.0
+        }
+
+        if (yVel < 0.003) {
+            yVel = 0.0
+        }
+
+        if (zVel < 0.003) {
+            zVel = 0.0
+        }
+        setVelocity(xVel, yVel, zVel)
+         */
+
+        tickCramming()
+
+        move(MovementType.SELF, velocity)
+    }
+
+    protected open fun tickCramming() {
+        val list =
+            world.getEntities(this, this.boundingBox, EntityPredicates.canBePushedBy(this))
+        if (list.isNotEmpty()) {
+            val i = world.gameRules.getInt(GameRules.MAX_ENTITY_CRAMMING)
+            var j: Int
+            if (i > 0 && list.size > i - 1 && random.nextInt(4) == 0) {
+                j = 0
+                for (k in list.indices) {
+                    if (!(list[k] as Entity).hasVehicle()) {
+                        ++j
+                    }
+                }
+                if (j > i - 1) {
+                    damage(DamageSource.CRAMMING, 6.0f)
+                }
+            }
+            j = 0
+            while (j < list.size) {
+                val entity = list[j] as Entity
+                this.pushAway(entity)
+                ++j
+            }
+        }
+    }
+
+    protected open fun pushAway(entity: Entity) {
+        entity.pushAwayFrom(this)
+    }
+
+    override fun isPushable() = true
+
+    override fun damage(source: DamageSource?, amount: Float): Boolean {
+        if(!removed) {
+            this.remove()
+            if (!world.isClient) {
+                this.explode()
+            }
+        }
+        return true
+    }
+
     private fun explode() {
         world.createExplosion(
             this, this.x, this.y, this.z,
@@ -96,7 +166,7 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
     }
 
     override fun writeCustomDataToTag(tag: CompoundTag) {
-        tag.putString("fuse", this.fuse)
+        fuse?.let { tag.putString("fuse", it) }
         tag.putInt("ticks", this.ticks)
     }
 

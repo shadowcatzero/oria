@@ -7,8 +7,8 @@ import net.minecraft.util.math.Vec3d
 
 object OriaHorseBaseEntity {
    fun onTick(horse: HorseBaseEntity, inv: BasicInventory) {
-      for (i in 0 until inv.invSize) {
-         val stack = inv.getInvStack(i)
+      for (i in 0 until inv.size()) {
+         val stack = inv.getStack(i)
          val item = stack.item
          if (item is SpatialOrbItem) {
             val breakPos = Vec3d(horse.x, horse.getBodyY(1.0), horse.z)

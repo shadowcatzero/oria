@@ -4,6 +4,7 @@ import cat16.oria.block.OriaBlocks
 import cat16.oria.component.OriaComponents
 import cat16.oria.entity.OriaEntities
 import cat16.oria.item.OriaItems
+import cat16.oria.recipe.OriaRecipes
 import cat16.oria.world.OriaBiomeHandler
 import net.fabricmc.api.ModInitializer
 import net.minecraft.text.TranslatableText
@@ -19,6 +20,7 @@ object Oria : ModInitializer {
         OriaItemGroups.init()
         OriaBiomeHandler.init()
         OriaComponents.init()
+        OriaRecipes.init()
     }
 
     fun id(name: String): Identifier {

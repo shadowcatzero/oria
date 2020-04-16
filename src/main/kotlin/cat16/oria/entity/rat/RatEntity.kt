@@ -6,8 +6,10 @@ import net.minecraft.entity.EntityCategory
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.ai.goal.*
+import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -21,12 +23,12 @@ open class RatEntity(type: EntityType<RatEntity>, world: World) : AnimalEntity(t
         override val oriaName: String = "rat"
         override val dimensions: EntityDimensions = EntityDimensions.fixed(0.3f, 0.2f)
         override val category: EntityCategory = EntityCategory.CREATURE
-    }
 
-    override fun initAttributes() {
-        super.initAttributes()
-        getAttributeInstance(EntityAttributes.MAX_HEALTH).baseValue = 10.0
-        attributes.register(EntityAttributes.ATTACK_DAMAGE).baseValue = 3.0
+        fun createRatAttributes(): DefaultAttributeContainer.Builder {
+            return MobEntity.createMobAttributes()
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0)
+        }
     }
 
     override fun initGoals() {

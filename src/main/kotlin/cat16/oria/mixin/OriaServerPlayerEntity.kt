@@ -23,8 +23,8 @@ object OriaServerPlayerEntity {
             )
         }
         val inv: Inventory = player.enderChestInventory
-        for (i in 0 until inv.invSize) {
-            handleStack(player, inv.getInvStack(i))
+        for (i in 0 until inv.size()) {
+            handleStack(player, inv.getStack(i))
         }
     }
     private fun handleStack(player: ServerPlayerEntity, stack: ItemStack): Boolean {

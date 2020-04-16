@@ -5,10 +5,9 @@ import cat16.oria.item.OriaItem
 import net.minecraft.item.Item
 import java.util.*
 
-typealias ExplodeCondition = (BombEntity) -> Boolean
+class FuseItem(name: String, val explodeCondition: (BombEntity) -> Boolean) : Item(Settings()), OriaItem {
 
-class FuseItem(name: String, val explodeCondition: ExplodeCondition) : Item(Settings()), OriaItem {
-
+    val fuseName = name
     override val oriaName: String = "${name}_fuse"
 
     init {

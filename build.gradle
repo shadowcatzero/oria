@@ -24,13 +24,10 @@ minecraft {
 repositories {
 	maven { url = "http://maven.fabricmc.net/" }
 	maven {
-		name = "NerdHubMC"
-		url = "https://maven.abusedmaster.xyz"
-	}
-	maven {
 		name = "CottonMC"
 		url = "http://server.bbkr.space:8081/artifactory/libs-release"
 	}
+	mavenLocal()
 }
 
 dependencies {
@@ -48,13 +45,13 @@ dependencies {
 	// You may need to force-disable transitiveness on them.
 
 	// Replace modImplementation with modApi if you expose components in your own API
-	modImplementation "com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
-	include "com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
+	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cardinal_components_version}"
 
-	modImplementation "com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
-	include "com.github.NerdHubMC.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
+	modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cardinal_components_version}"
 
-	modImplementation "io.github.cottonmc:LibGui:${project.libgui_version}"
+	modApi "io.github.cottonmc:LibGui:${project.libgui_version}"
 	include "io.github.cottonmc:LibGui:${project.libgui_version}"
 }
 

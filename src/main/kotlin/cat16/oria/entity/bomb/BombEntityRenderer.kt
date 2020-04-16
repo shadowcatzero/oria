@@ -29,7 +29,7 @@ class BombEntityRenderer(entityRenderDispatcher: EntityRenderDispatcher) : Entit
         val vertexConsumer: VertexConsumer =
             vertexConsumers.getBuffer(model.getLayer(getTexture(entity)))
         matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(entity.yaw))
-        model.setAngles(entity, 0f, 0f, 0f, entity.yaw, entity.rollDistance * 2 + entity.pitch)
+        model.setAngles(entity, 0f, 0f, 0f, 0f, entity.rollDistance * 2 + entity.pitch)
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f)
         matrices.pop()
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
