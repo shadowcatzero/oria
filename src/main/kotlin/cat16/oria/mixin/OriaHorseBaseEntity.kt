@@ -1,6 +1,6 @@
 package cat16.oria.mixin
 
-import cat16.oria.item.SpatialOrbItem
+import cat16.oria.item.tool.SpatialOrbItem
 import net.minecraft.entity.passive.HorseBaseEntity
 import net.minecraft.inventory.BasicInventory
 import net.minecraft.util.math.Vec3d

@@ -1,6 +1,6 @@
 package cat16.oria.mixin
 
-import cat16.oria.item.SpatialOrbItem
+import cat16.oria.item.tool.SpatialOrbItem
 import cat16.oria.network.OriaPackets
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry

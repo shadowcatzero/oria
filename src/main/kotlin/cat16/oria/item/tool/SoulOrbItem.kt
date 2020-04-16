@@ -1,5 +1,6 @@
-package cat16.oria.item
+package cat16.oria.item.tool
 
+import cat16.oria.item.OriaItem
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity

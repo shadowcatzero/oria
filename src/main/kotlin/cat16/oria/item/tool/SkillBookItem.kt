@@ -1,7 +1,8 @@
-package cat16.oria.item
+package cat16.oria.item.tool
 
 import cat16.oria.client.gui.SkillBookGui
 import cat16.oria.client.screen.SkillBookScreen
+import cat16.oria.item.OriaItem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item

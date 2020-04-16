@@ -1,5 +1,6 @@
-package cat16.oria.item
+package cat16.oria.item.material
 
+import cat16.oria.item.OriaItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 

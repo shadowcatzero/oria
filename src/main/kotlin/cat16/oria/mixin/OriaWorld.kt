@@ -1,6 +1,6 @@
 package cat16.oria.mixin
 
-import cat16.oria.item.SpatialOrbItem
+import cat16.oria.item.tool.SpatialOrbItem
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.util.math.Vec3d

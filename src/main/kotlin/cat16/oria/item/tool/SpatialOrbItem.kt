@@ -1,7 +1,8 @@
-package cat16.oria.item
+package cat16.oria.item.tool
 
 import cat16.oria.Oria
 import cat16.oria.component.OriaComponents
+import cat16.oria.item.OriaItem
 import cat16.oria.jMixin.ServerWorldAccessor
 import cat16.oria.network.OriaPackets
 import io.netty.buffer.Unpooled

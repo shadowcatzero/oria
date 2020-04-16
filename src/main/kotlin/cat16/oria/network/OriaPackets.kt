@@ -2,7 +2,7 @@ package cat16.oria.network
 
 import cat16.oria.Oria.id
 import cat16.oria.item.OriaItems
-import cat16.oria.item.SpatialOrbItem
+import cat16.oria.item.tool.SpatialOrbItem
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketContext
 import net.minecraft.item.ItemStack

@@ -1,6 +1,6 @@
 package cat16.oria.jMixin;
 
-import cat16.oria.item.SpatialOrbItem;
+import cat16.oria.item.tool.SpatialOrbItem;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

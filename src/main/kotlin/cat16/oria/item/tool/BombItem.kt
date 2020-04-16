@@ -1,6 +1,7 @@
-package cat16.oria.item
+package cat16.oria.item.tool
 
 import cat16.oria.entity.bomb.BombEntity
+import cat16.oria.item.OriaItem
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack

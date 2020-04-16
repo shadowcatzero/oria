@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "oria:rat_tail"
+  },
+  "result": "oria:cooked_rat_tail",
+  "experience": 0.35,
+  "cookingtime": 200
+}
