@@ -5,7 +5,8 @@ import net.minecraft.block.Block
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 
 @Suppress("unused")
 object OriaBlocks {
@@ -49,8 +50,8 @@ object OriaBlocks {
             val item = pair.second
 
             val id = Oria.id((block as OriaBlock).oriaName)
-            Registry.register(Registry.BLOCK, id, block)
-            item?.let { Registry.register(Registry.ITEM, id, it) }
+            Registry.register(Registries.BLOCK, id, block)
+            item?.let { Registry.register(Registries.ITEM, id, it) }
         }
     }
 

@@ -7,23 +7,31 @@ import cat16.oria.network.EntityPacket
 import cat16.oria.network.OriaPackets
 import net.minecraft.entity.*
 import net.minecraft.entity.damage.DamageSource
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.Packet
+import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.predicate.entity.EntityPredicates
+import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.GameRules
 import net.minecraft.world.World
 import net.minecraft.world.explosion.Explosion
+import software.bernie.geckolib.animatable.GeoEntity
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
+import software.bernie.geckolib.core.animation.AnimatableManager
+import software.bernie.geckolib.util.GeckoLibUtil
+import java.util.function.Consumer
 
-open class BombEntity(type: EntityType<BombEntity>, world: World) :
-    Entity(type, world) {
+class BombEntity(type: EntityType<BombEntity>, world: World) :
+    Entity(type, world), GeoEntity {
 
     var rollDistance = 0f;
-
     var fuse: String? = null
-
     var ticks: Int = 0
+
+    private val cache = GeckoLibUtil.createInstanceCache(this)
 
     constructor(world: World) : this(OriaEntities.BOMB, world)
 
@@ -34,7 +42,7 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
     companion object : OriaEntityInfo {
         override val oriaName: String = "bomb"
         override val dimensions: EntityDimensions = EntityDimensions.fixed(0.4f, 0.4f)
-        override val category: EntityCategory = EntityCategory.MISC
+        override val spawnGroup: SpawnGroup = SpawnGroup.MISC
     }
 
     fun launchFrom(
@@ -67,7 +75,7 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
         if(fuse != null) ticks++
 
         if (FuseItem.getCondition(fuse).invoke(this)) {
-            this.remove()
+            this.remove(RemovalReason.KILLED)
             if (!world.isClient) {
                 this.explode()
             }
@@ -79,7 +87,7 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
         }
     }
 
-    open fun tickMovement() {
+    private fun tickMovement() {
 
         if (!hasNoGravity()) {
             velocity = velocity.add(0.0, -0.07, 0.0)
@@ -112,41 +120,52 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
         move(MovementType.SELF, velocity)
     }
 
-    protected open fun tickCramming() {
-        val list =
-            world.getEntities(this, this.boundingBox, EntityPredicates.canBePushedBy(this))
-        if (list.isNotEmpty()) {
-            val i = world.gameRules.getInt(GameRules.MAX_ENTITY_CRAMMING)
-            var j: Int
-            if (i > 0 && list.size > i - 1 && random.nextInt(4) == 0) {
-                j = 0
-                for (k in list.indices) {
-                    if (!(list[k] as Entity).hasVehicle()) {
-                        ++j
+    private fun tickCramming() {
+        if (world.isClient()) {
+            world.getEntitiesByType(
+                TypeFilter.instanceOf(
+                    PlayerEntity::class.java
+                ),
+                boundingBox, EntityPredicates.canBePushedBy(this)
+            ).forEach(Consumer { entity: PlayerEntity? ->
+                pushAway(
+                    entity!!
+                )
+            })
+        } else {
+            val list = world.getOtherEntities(this, boundingBox, EntityPredicates.canBePushedBy(this))
+            if (list.isNotEmpty()) {
+                val i = world.gameRules.getInt(GameRules.MAX_ENTITY_CRAMMING)
+                var j: Int
+                if (i > 0 && list.size > i - 1 && random.nextInt(4) == 0) {
+                    j = 0
+                    for (k in list.indices) {
+                        if (!list[k].hasVehicle()) {
+                            ++j
+                        }
+                    }
+                    if (j > i - 1) {
+                        damage(DamageSource.CRAMMING, 6.0f)
                     }
                 }
-                if (j > i - 1) {
-                    damage(DamageSource.CRAMMING, 6.0f)
+                j = 0
+                while (j < list.size) {
+                    pushAway(list[j])
+                    ++j
                 }
-            }
-            j = 0
-            while (j < list.size) {
-                val entity = list[j] as Entity
-                this.pushAway(entity)
-                ++j
             }
         }
     }
 
-    protected open fun pushAway(entity: Entity) {
+    private fun pushAway(entity: Entity) {
         entity.pushAwayFrom(this)
     }
 
     override fun isPushable() = true
 
     override fun damage(source: DamageSource?, amount: Float): Boolean {
-        if(!removed) {
-            this.remove()
+        if(!this.isRemoved) {
+            this.remove(RemovalReason.KILLED)
             if (!world.isClient) {
                 this.explode()
             }
@@ -157,30 +176,37 @@ open class BombEntity(type: EntityType<BombEntity>, world: World) :
     private fun explode() {
         world.createExplosion(
             this, this.x, this.y, this.z,
-            3f, Explosion.DestructionType.BREAK
+            3f, World.ExplosionSourceType.TNT
         )
     }
 
-    override fun collides(): Boolean {
+    override fun collidesWith(other: Entity?): Boolean {
         return true
     }
 
-    override fun writeCustomDataToTag(tag: CompoundTag) {
-        fuse?.let { tag.putString("fuse", it) }
-        tag.putInt("ticks", this.ticks)
+    override fun writeCustomDataToNbt(nbt: NbtCompound) {
+        fuse?.let { nbt.putString("fuse", it) }
+        nbt.putInt("ticks", this.ticks)
     }
 
-    override fun readCustomDataFromTag(tag: CompoundTag) {
-        this.fuse = tag.getString("fuse")
-        this.ticks = tag.getInt("ticks")
+    override fun readCustomDataFromNbt(nbt: NbtCompound) {
+        this.fuse = nbt.getString("fuse")
+        this.ticks = nbt.getInt("ticks")
     }
 
-    override fun createSpawnPacket(): Packet<*>? {
+    override fun createSpawnPacket(): Packet<ClientPlayPacketListener> {
         return EntityPacket.createSpawnPacket(this, OriaPackets.ENTITY_SPAWN_PACKET)
     }
 
     override fun initDataTracker() {
 
+    }
+
+    override fun registerControllers(p0: AnimatableManager.ControllerRegistrar?) {
+    }
+
+    override fun getAnimatableInstanceCache(): AnimatableInstanceCache {
+        return cache
     }
 
 }

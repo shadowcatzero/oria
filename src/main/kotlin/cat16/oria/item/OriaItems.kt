@@ -7,7 +7,8 @@ import cat16.oria.item.component.FuseItem
 import cat16.oria.item.material.OriumShard
 import cat16.oria.item.tool.*
 import net.minecraft.item.Item
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 
 object OriaItems {
 
@@ -26,7 +27,7 @@ object OriaItems {
     val RAT_SPAWN_EGG = register(OriaSpawnEggItem(RatEntity.Companion, OriaEntities.RAT, 0x2222222, 0xffaaaa))
 
     fun init() {
-        items.forEach { Registry.register(Registry.ITEM, Oria.id((it as OriaItem).oriaName), it) }
+        items.forEach { Registry.register(Registries.ITEM, Oria.id((it as OriaItem).oriaName), it) }
     }
 
     private fun <I> register(item: I): I where I : Item, I : OriaItem {

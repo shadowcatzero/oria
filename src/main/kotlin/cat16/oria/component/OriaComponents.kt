@@ -1,34 +1,22 @@
 package cat16.oria.component
 
 import cat16.oria.Oria
-import cat16.oria.component.api.EntityMagicComponent
-import cat16.oria.component.impl.EntityMagicComponentImpl
-import nerdhub.cardinal.components.api.ComponentRegistry
+import cat16.oria.component.api.MagicComponent
+import cat16.oria.component.impl.EntityMagicComponent
+import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3
+import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry
+import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer
+import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy
 
-import nerdhub.cardinal.components.api.ComponentType
-import nerdhub.cardinal.components.api.component.Component
-import nerdhub.cardinal.components.api.event.EntityComponentCallback
-import nerdhub.cardinal.components.api.util.EntityComponents
-import nerdhub.cardinal.components.api.util.RespawnCopyStrategy
 import net.minecraft.entity.player.PlayerEntity
-import kotlin.reflect.KClass
 
-object OriaComponents {
-    val MAGIC: ComponentType<EntityMagicComponent> = register("magic", EntityMagicComponent::class)
-        .attach(EntityComponentCallback.event(PlayerEntity::class.java)) { player ->
-            EntityMagicComponentImpl(
-                player
-            )
-        }
+object OriaComponents : EntityComponentInitializer {
 
-    fun init() {
-        EntityComponents.setRespawnCopyStrategy(MAGIC, RespawnCopyStrategy.INVENTORY)
-    }
+    val MAGIC = ComponentRegistryV3.INSTANCE.getOrCreate(Oria.id("magic"), MagicComponent::class.java)
 
-    private fun <T : Component> register(name: String, cls: KClass<T>): ComponentType<T> {
-        return ComponentRegistry.INSTANCE.registerIfAbsent(
-            Oria.id(name),
-            cls.java
-        )
+    override fun registerEntityComponentFactories(registry: EntityComponentFactoryRegistry) {
+        registry.beginRegistration(PlayerEntity::class.java, MAGIC)
+            .respawnStrategy(RespawnCopyStrategy.INVENTORY)
+            .end(::EntityMagicComponent)
     }
 }

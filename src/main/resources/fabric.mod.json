@@ -4,12 +4,12 @@
   "version": "${version}",
 
   "name": "Oria",
-  "description": "A heavy magic mod",
+  "description": "Let's go golfing",
   "authors": [
     "cat16"
   ],
   "contact": {
-    "sources": "https://github.com/cat16/oria"
+    "sources": "the void"
   },
 
   "license": "CC0-1.0",
@@ -28,6 +28,9 @@
         "adapter": "kotlin",
         "value": "cat16.oria.client.OriaClient"
       }
+    ],
+    "cardinal-components": [
+      "cat16.oria.component.OriaComponents"
     ]
   },
   "mixins": [
@@ -37,10 +40,15 @@
   "depends": {
     "fabricloader": ">=0.7.2",
     "fabric": "*",
-    "minecraft": "1.16.x",
-    "fabric-language-kotlin": "*"
+    "minecraft": "1.19.3",
+    "fabric-language-kotlin": ">=1.9.1+kotlin.1.8.10"
   },
   "suggests": {
     "flamingo": "*"
+  },
+  "custom": {
+    "cardinal-components": [
+      "oria:magic"
+    ]
   }
 }

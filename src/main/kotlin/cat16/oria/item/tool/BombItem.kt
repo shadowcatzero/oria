@@ -10,6 +10,7 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
+import kotlin.random.Random
 
 class BombItem(settings: Settings) : Item(settings), OriaItem {
     constructor() : this(Settings())
@@ -27,14 +28,14 @@ class BombItem(settings: Settings) : Item(settings), OriaItem {
             SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
             SoundCategory.PLAYERS,
             0.5f,
-            1f / (RANDOM.nextFloat() * 0.4f + 0.8f)
+            1f / (Random.nextFloat() * 0.4f + 0.8f)
         )
 
         if (!world.isClient) {
             val bombEntity = BombEntity(world)
             bombEntity.updatePosition(user.x, user.eyeY - 0.1, user.z)
             bombEntity.launchFrom(user, user.pitch, user.yaw, user.roll.toFloat(), 0.3)
-            bombEntity.fuse = stack.tag?.getString("fuse")
+            bombEntity.fuse = stack.nbt?.getString("fuse")
             world.spawnEntity(bombEntity)
         }
 

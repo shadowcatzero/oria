@@ -19,7 +19,7 @@ class SkillBookItem(settings: Settings?) : Item(settings), OriaItem {
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         if(world!!.isClient) {
-            MinecraftClient.getInstance().openScreen(SkillBookScreen(SkillBookGui()))
+            MinecraftClient.getInstance().setScreen(SkillBookScreen(SkillBookGui()))
         }
         return super.use(world, user, hand)
     }

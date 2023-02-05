@@ -7,20 +7,20 @@ import cat16.oria.entity.rat.RatEntity
 import cat16.oria.entity.rat.RatEntityRenderer
 import cat16.oria.entity.tntMinion.TntMinionEntity
 import cat16.oria.entity.tntMinion.TntMinionEntityRenderer
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
-import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
-import net.minecraft.client.render.entity.EntityRenderDispatcher
-import net.minecraft.client.render.entity.EntityRenderer
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
+import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
+import net.minecraft.client.render.entity.EntityRendererFactory
 import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityCategory
 import net.minecraft.entity.EntityType
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 import net.minecraft.world.World
 import net.minecraft.world.biome.Biome
 
-object OriaEntities {
+typealias ETPair<E> = Pair<EntityType<out E>, EntityRendererFactory<out E>>
 
-    val types: MutableList<Pair<EntityType<*>, (EntityRenderDispatcher) -> EntityRenderer<*>>> = mutableListOf()
+object OriaEntities {
+    private val toRegister: MutableList<() -> Unit> = mutableListOf()
 
 
 
@@ -31,20 +31,16 @@ object OriaEntities {
 
 
     fun init() {
-        Registry.BIOME.forEach { biome ->
-            run {
-                biome.getEntitySpawnList(EntityCategory.CREATURE).add(Biome.SpawnEntry(RAT, 50, 1, 2))
-            }
-        }
     }
 
     fun clientInit() {
-        types.forEach{type -> EntityRendererRegistry.INSTANCE.register(type.first) {dispatcher, _ -> type.second(dispatcher) } }
+        EntityRendererRegistry.register(RAT) { ctx -> RatEntityRenderer(ctx) }
+        toRegister.forEach{r -> r()}
     }
 
-    private fun <E> register(factory: (EntityType<E>, World) -> E, info: OriaEntityInfo, renderer: (EntityRenderDispatcher) -> EntityRenderer<*>) : EntityType<E> where E : Entity {
-        val entityType = Registry.register(Registry.ENTITY_TYPE, Oria.id(info.oriaName), FabricEntityTypeBuilder.create(info.category, factory).size(info.dimensions).build())
-        types.add(Pair(entityType, renderer))
+    private fun <E : Entity> register(factory: (EntityType<E>, World) -> E, info: OriaEntityInfo, renderer: EntityRendererFactory<E>) : EntityType<E> {
+        val entityType = Registry.register(Registries.ENTITY_TYPE, Oria.id(info.oriaName), FabricEntityTypeBuilder.create(info.spawnGroup, factory).dimensions(info.dimensions).build())
+        toRegister.add { EntityRendererRegistry.register(entityType, renderer) }
         return entityType
     }
 }

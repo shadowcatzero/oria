@@ -2,21 +2,21 @@ package cat16.oria.item.tool
 
 import cat16.oria.item.OriaItem
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.registry.Registries
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 
 class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
@@ -28,9 +28,9 @@ class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
     override fun useOnEntity(stack: ItemStack, user: PlayerEntity, entity: LivingEntity, hand: Hand): Boolean {
         val orb = user.getStackInHand(hand)
         return if (!hasSoul(orb)) {
-            val tag = orb.orCreateTag
-            tag.putInt("typeId", Registry.ENTITY_TYPE.getRawId(entity.type))
-            entity.remove()
+            val tag = orb.orCreateNbt
+            tag.putInt("typeId", Registries.ENTITY_TYPE.getRawId(entity.type))
+            entity.remove(Entity.RemovalReason.DISCARDED)
             user.playSound(FILL_SOUND, 1.0f, 1.0f)
             stack.cooldown = 5
             true

@@ -5,6 +5,7 @@ import cat16.oria.component.OriaComponents
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.util.math.MatrixStack
 
 object OriaInGameHud {
 
@@ -19,9 +20,8 @@ object OriaInGameHud {
         val scaledHeight: Int
     }
 
-    fun onRender(hud: Interface) {
+    fun onRender(hud: Interface, matrices: MatrixStack) {
         RenderSystem.disableDepthTest()
-        RenderSystem.disableAlphaTest()
 
         val manaManager = OriaComponents.MAGIC.get(hud.client.player!!).manaManager
 
@@ -35,11 +35,10 @@ object OriaInGameHud {
         val manaWidth = (manaManager.mana / manaManager.maxMana) * width
 
         hud.client.textureManager.bindTexture(MANA_BAR_BASE_LOCATION)
-        DrawableHelper.drawTexture(x, y, 0F, 0F, width, height, width, height)
+        DrawableHelper.drawTexture(matrices, x, y, 0F, 0F, width, height, width, height)
         hud.client.textureManager.bindTexture(MANA_BAR_FILL_LOCATION)
-        DrawableHelper.drawTexture(x, y, 0F, 0F, manaWidth.toInt(), height, width, height)
+        DrawableHelper.drawTexture(matrices, x, y, 0F, 0F, manaWidth.toInt(), height, width, height)
 
-        RenderSystem.enableAlphaTest()
         RenderSystem.enableDepthTest()
     }
 }

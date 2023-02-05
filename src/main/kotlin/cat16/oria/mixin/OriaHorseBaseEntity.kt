@@ -1,12 +1,12 @@
 package cat16.oria.mixin
 
 import cat16.oria.item.tool.SpatialOrbItem
-import net.minecraft.entity.passive.HorseBaseEntity
-import net.minecraft.inventory.BasicInventory
+import net.minecraft.entity.passive.AbstractHorseEntity
+import net.minecraft.inventory.Inventory
 import net.minecraft.util.math.Vec3d
 
 object OriaHorseBaseEntity {
-   fun onTick(horse: HorseBaseEntity, inv: BasicInventory) {
+   fun onTick(horse: AbstractHorseEntity, inv: Inventory) {
       for (i in 0 until inv.size()) {
          val stack = inv.getStack(i)
          val item = stack.item

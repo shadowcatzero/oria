@@ -1,13 +1,7 @@
 package cat16.oria.entity.tntMinion
 
-import cat16.oria.Oria
-import net.minecraft.client.render.entity.EntityRenderDispatcher
-import net.minecraft.client.render.entity.MobEntityRenderer
-import net.minecraft.util.Identifier
+import net.minecraft.client.render.entity.EntityRendererFactory
+import software.bernie.geckolib.renderer.GeoEntityRenderer
 
-class TntMinionEntityRenderer(entityRenderDispatcher: EntityRenderDispatcher) : MobEntityRenderer<TntMinionEntity, TntMinionEntityModel<TntMinionEntity>>(entityRenderDispatcher,
-    TntMinionEntityModel(), 0.2f) {
-    override fun getTexture(entity: TntMinionEntity?): Identifier {
-        return Oria.id("textures/entity/tnt_minion/tnt_minion.png")
-    }
-}
+class TntMinionEntityRenderer(ctx: EntityRendererFactory.Context) : GeoEntityRenderer<TntMinionEntity>(ctx,
+    TntMinionEntityModel())

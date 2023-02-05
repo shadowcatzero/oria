@@ -10,7 +10,7 @@ class OriumShard(settings: Settings?) : Item(settings), OriaItem {
 
     override val oriaName = "orium_shard"
 
-    override fun hasEnchantmentGlint(stack: ItemStack): Boolean {
+    override fun hasGlint(stack: ItemStack?): Boolean {
         return true
     }
 }

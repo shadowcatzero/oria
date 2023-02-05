@@ -3,7 +3,7 @@ package cat16.oria.mixin
 import cat16.oria.item.tool.SpatialOrbItem
 import cat16.oria.network.OriaPackets
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
@@ -12,10 +12,10 @@ import net.minecraft.util.math.Vec3d
 
 object OriaServerPlayerEntity {
     fun onTick(player: ServerPlayerEntity) {
-        if (handleStack(player, player.inventory.cursorStack)) {
-            player.inventory.cursorStack = ItemStack.EMPTY
+        if (handleStack(player, player.currentScreenHandler.cursorStack)) {
+            player.currentScreenHandler.cursorStack = ItemStack.EMPTY
             player.networkHandler.sendPacket(
-                ServerSidePacketRegistry.INSTANCE.toPacket(
+                ServerPlayNetworking.createS2CPacket(
                     OriaPackets.REMOVE_CURSOR_STACK_PACKET_ID, PacketByteBuf(
                         Unpooled.buffer()
                     )

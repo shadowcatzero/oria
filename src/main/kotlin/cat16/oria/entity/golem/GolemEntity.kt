@@ -1,20 +1,20 @@
 package cat16.oria.entity.golem
 
 import cat16.oria.entity.OriaEntityInfo
-import net.minecraft.entity.EntityCategory
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.ai.goal.*
-import net.minecraft.entity.mob.MobEntityWithAi
+import net.minecraft.entity.mob.PathAwareEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.world.World
 
-open class GolemEntity(type: EntityType<GolemEntity>, world: World) : MobEntityWithAi(type, world) {
+open class GolemEntity(type: EntityType<GolemEntity>, world: World) : PathAwareEntity(type, world) {
 
     companion object: OriaEntityInfo {
         override val oriaName: String = "golem"
         override val dimensions: EntityDimensions = EntityDimensions.fixed(0.3f, 0.4f)
-        override val category: EntityCategory = EntityCategory.CREATURE
+        override val spawnGroup: SpawnGroup = SpawnGroup.CREATURE
     }
 
     override fun initGoals() {

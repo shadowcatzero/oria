@@ -7,7 +7,7 @@ import cat16.oria.item.OriaItems
 import cat16.oria.recipe.OriaRecipes
 import cat16.oria.world.OriaBiomeHandler
 import net.fabricmc.api.ModInitializer
-import net.minecraft.text.TranslatableText
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 object Oria : ModInitializer {
@@ -19,7 +19,6 @@ object Oria : ModInitializer {
         OriaEntities.init()
         OriaItemGroups.init()
         OriaBiomeHandler.init()
-        OriaComponents.init()
         OriaRecipes.init()
     }
 
@@ -31,7 +30,7 @@ object Oria : ModInitializer {
         return "$type.$MOD_ID.$name"
     }
 
-    fun text(type: String, name: String, vararg args: Any): TranslatableText {
-        return TranslatableText(key(type, name), args)
+    fun text(type: String, name: String, vararg args: Any): Text {
+        return Text.translatable(key(type, name), args)
     }
 }

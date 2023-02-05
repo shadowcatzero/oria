@@ -3,8 +3,10 @@ package cat16.oria.network
 import cat16.oria.Oria.id
 import cat16.oria.item.OriaItems
 import cat16.oria.item.tool.SpatialOrbItem
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
-import net.fabricmc.fabric.api.network.PacketContext
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.particle.ItemStackParticleEffect
@@ -24,13 +26,12 @@ object OriaPackets {
     val ENTITY_SPAWN_PACKET = packet("entity_spawn")
 
     fun clientInit() {
-        register(BREAK_SOUL_ORB_PACKET_ID) { context: PacketContext, data: PacketByteBuf ->
+        register(BREAK_SOUL_ORB_PACKET_ID) { client, handler, data: PacketByteBuf, sender ->
             val x = data.readDouble()
             val y = data.readDouble()
             val z = data.readDouble()
             val pos = Vec3d(x, y, z)
-            val player = context.player
-            player.world.playSound(
+            client.world?.playSound(
                 pos.x,
                 pos.y,
                 pos.z,
@@ -40,7 +41,7 @@ object OriaPackets {
                 1f,
                 true
             )
-            player.world.playSound(
+            client.world?.playSound(
                 pos.x,
                 pos.y,
                 pos.z,
@@ -51,14 +52,14 @@ object OriaPackets {
                 true
             )
             for (i in 0..9) {
-                player.world.addParticle(
+                client.world?.addParticle(
                     ItemStackParticleEffect(ParticleTypes.ITEM, ItemStack(OriaItems.SPATIAL_ORB)),
                     pos.x, pos.y, pos.z, randomVel(0.2), randomVel(0.2), randomVel(0.2)
                 )
             }
         }
-        register(REMOVE_CURSOR_STACK_PACKET_ID) { context: PacketContext, _: PacketByteBuf? ->
-            context.player.inventory.cursorStack = ItemStack.EMPTY
+        register(REMOVE_CURSOR_STACK_PACKET_ID) { client, _, _, _ ->
+            client.player?.inventory.cursorStack = ItemStack.EMPTY
         }
         EntityPacket.client_RegisterEntityPacket(ENTITY_SPAWN_PACKET)
     }
@@ -71,7 +72,7 @@ object OriaPackets {
         return id(name)
     }
 
-    private fun register(id: Identifier, consumer: (PacketContext, PacketByteBuf) -> Unit) {
-        ClientSidePacketRegistry.INSTANCE.register(id, consumer)
+    private fun register(id: Identifier, consumer: (MinecraftClient, ClientPlayNetworkHandler, PacketByteBuf, PacketSender) -> Unit) {
+        ClientPlayNetworking.registerReceiver(id, consumer)
     }
 }
