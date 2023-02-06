@@ -35,7 +35,7 @@ object EntityPacket {
     fun client_RegisterEntityPacket(packetID: Identifier) {
         //Biow0rks.logger.debug("Registered Spawn Packet %s", packetID)
         //stolen code lol but that reminds me I should add a logger
-        ClientPlayNetworking.registerReceiver(
+        ClientPlayNetworking.registerGlobalReceiver(
             packetID
         ) { client, _, pbb: PacketByteBuf, _ ->
             val et: EntityType<*> = Registries.ENTITY_TYPE.get(pbb.readVarInt())

@@ -4,11 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "DefaultAttributeRegistryMixin",
-    "ServerWorldAccessor",
     "ItemEntityMixin",
     "WorldMixin",
     "ServerPlayerEntityMixin",
-    "HorseBaseEntityMixin",
+    "AbstractHorseEntityMixin",
     "MobEntityMixin",
     "PlayerEntityMixin"
   ],

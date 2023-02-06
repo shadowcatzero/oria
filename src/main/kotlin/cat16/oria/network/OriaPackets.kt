@@ -26,7 +26,7 @@ object OriaPackets {
     val ENTITY_SPAWN_PACKET = packet("entity_spawn")
 
     fun clientInit() {
-        register(BREAK_SOUL_ORB_PACKET_ID) { client, handler, data: PacketByteBuf, sender ->
+        register(BREAK_SOUL_ORB_PACKET_ID) { client, _, data, _ ->
             val x = data.readDouble()
             val y = data.readDouble()
             val z = data.readDouble()
@@ -59,7 +59,7 @@ object OriaPackets {
             }
         }
         register(REMOVE_CURSOR_STACK_PACKET_ID) { client, _, _, _ ->
-            client.player?.inventory.cursorStack = ItemStack.EMPTY
+            client.player?.currentScreenHandler?.cursorStack = ItemStack.EMPTY
         }
         EntityPacket.client_RegisterEntityPacket(ENTITY_SPAWN_PACKET)
     }
@@ -73,6 +73,6 @@ object OriaPackets {
     }
 
     private fun register(id: Identifier, consumer: (MinecraftClient, ClientPlayNetworkHandler, PacketByteBuf, PacketSender) -> Unit) {
-        ClientPlayNetworking.registerReceiver(id, consumer)
+        ClientPlayNetworking.registerGlobalReceiver(id, consumer)
     }
 }

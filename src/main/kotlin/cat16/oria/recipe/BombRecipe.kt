@@ -6,10 +6,13 @@ import net.minecraft.inventory.CraftingInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
+import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
-class BombRecipe(identifier: Identifier) : SpecialCraftingRecipe(identifier) {
+class BombRecipe(identifier: Identifier, category: CraftingRecipeCategory) : SpecialCraftingRecipe(identifier,
+    category
+) {
     override fun matches(inv: CraftingInventory, world: World): Boolean {
         var fuse = false
         for(i in 0 until inv.size()) {
@@ -35,7 +38,7 @@ class BombRecipe(identifier: Identifier) : SpecialCraftingRecipe(identifier) {
         }
         return if(fuse != null) {
             val bomb = ItemStack(OriaItems.BOMB)
-            bomb.orCreateTag.putString("fuse", fuse.fuseName)
+            bomb.orCreateNbt.putString("fuse", fuse.fuseName)
             bomb
         } else ItemStack.EMPTY
     }

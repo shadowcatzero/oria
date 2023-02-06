@@ -21,10 +21,10 @@ class InGameHudMixin implements OriaInGameHud.Interface {
 
     @Shadow private int scaledHeight;
 
-    @Inject(method = "render", at = @At("RETURN"))
-    public void onRender(MatrixStack matrices, CallbackInfo ci) {
-        cat16.oria.mixin.OriaInGameHud.INSTANCE.onRender(this, matrices);
-    }
+    //@Inject(method = "render", at = @At("RETURN"))
+    //public void onRender(MatrixStack matrices, CallbackInfo ci) {
+    //    cat16.oria.mixin.OriaInGameHud.INSTANCE.onRender(this, matrices);
+    //}
 
     @NotNull
     @Override

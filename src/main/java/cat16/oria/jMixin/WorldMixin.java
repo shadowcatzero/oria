@@ -13,8 +13,8 @@ import java.util.Iterator;
 
 @Mixin(World.class)
 class WorldMixin {
-    @Inject(method = "tickBlockEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Tickable;tick()V"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void onTick(CallbackInfo ci, Profiler profiler, Iterator<?> it, BlockEntity blockEntity) {
-        cat16.oria.mixin.OriaWorld.INSTANCE.onTick(blockEntity);
-    }
+    //@Inject(method = "tickBlockEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/BlockEntityTickInvoker;tick()V"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    //public void onTick(CallbackInfo ci, Profiler profiler, Iterator<?> it, BlockEntity blockEntity) {
+    //    cat16.oria.mixin.OriaWorld.INSTANCE.onTick(blockEntity);
+    //}
 }

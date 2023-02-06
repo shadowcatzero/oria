@@ -1,7 +1,9 @@
 package cat16.oria.item.tool
 
 import cat16.oria.item.OriaItem
+import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -9,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
@@ -25,17 +28,18 @@ class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
 
     override val oriaName = "soul_orb"
 
-    override fun useOnEntity(stack: ItemStack, user: PlayerEntity, entity: LivingEntity, hand: Hand): Boolean {
+    override fun useOnEntity(stack: ItemStack, user: PlayerEntity, entity: LivingEntity, hand: Hand): ActionResult {
         val orb = user.getStackInHand(hand)
         return if (!hasSoul(orb)) {
             val tag = orb.orCreateNbt
             tag.putInt("typeId", Registries.ENTITY_TYPE.getRawId(entity.type))
             entity.remove(Entity.RemovalReason.DISCARDED)
             user.playSound(FILL_SOUND, 1.0f, 1.0f)
-            stack.cooldown = 5
-            true
+            user.itemCooldownManager.set(this, 5)
+            Items.ENDER_PEARL
+            return ActionResult.SUCCESS
         } else {
-            false
+            return ActionResult.FAIL
         }
     }
 
@@ -43,8 +47,8 @@ class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
         if (context.player == null) return ActionResult.FAIL
         val orb = context.player!!.getStackInHand(context.hand)
         return if (hasSoul(orb)) {
-            assert(orb.tag != null)
-            orb.tag!!.remove("typeId")
+            assert(orb.nbt != null)
+            orb.nbt!!.remove("typeId")
             context.player!!.playSound(RELEASE_SOUND, 1.0f, 1.0f)
             ActionResult.SUCCESS
         } else {
@@ -52,17 +56,17 @@ class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
         }
     }
 
-    override fun hasEnchantmentGlint(stack: ItemStack): Boolean {
+    override fun hasGlint(stack: ItemStack): Boolean {
         return hasSoul(stack)
     }
 
     override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
         if (hasSoul(stack)) {
             val type: EntityType<*>? = getEntityType(stack)
-            val typeText = type!!.name.deepCopy().formatted(Formatting.DARK_PURPLE)
-            tooltip.add(TranslatableText(tooltipKey("filled"), typeText).formatted(Formatting.GRAY))
+            val typeText = type!!.name.copy().formatted(Formatting.DARK_PURPLE)
+            tooltip.add(Text.translatable(tooltipKey("filled"), typeText).formatted(Formatting.GRAY))
         } else {
-            tooltip.add(TranslatableText(tooltipKey("empty")).formatted(Formatting.GRAY))
+            tooltip.add(Text.translatable(tooltipKey("empty")).formatted(Formatting.GRAY))
         }
     }
 
@@ -80,16 +84,16 @@ class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
 
     private fun getEntityType(stack: ItemStack): EntityType<out LivingEntity>? {
         return if (hasSoul(stack)) {
-            assert(stack.tag != null)
+            assert(stack.nbt != null)
             @Suppress("UNCHECKED_CAST")
-            Registry.ENTITY_TYPE[stack.tag!!.getInt("typeId")] as EntityType<out LivingEntity>
+            Registries.ENTITY_TYPE[stack.nbt!!.getInt("typeId")] as EntityType<out LivingEntity>
         } else {
             null
         }
     }
 
     private fun hasSoul(stack: ItemStack): Boolean {
-        val tag = stack.orCreateTag
+        val tag = stack.orCreateNbt
         return tag.contains("typeId")
     }
 
@@ -102,6 +106,6 @@ class SoulOrbItem(settings: Settings?) : Item(settings), OriaItem {
     }
 
     init {
-        addPropertyGetter(Identifier("filled")) { stack: ItemStack, world: World?, entity: LivingEntity? -> if (hasSoul(stack)) 1f else 0f }
+        ModelPredicateProviderRegistry.register(Identifier("filled")) { stack, _, _, _ -> if (hasSoul(stack)) 1f else 0f }
     }
 }

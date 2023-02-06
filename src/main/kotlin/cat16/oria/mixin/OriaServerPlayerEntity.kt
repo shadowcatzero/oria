@@ -22,7 +22,7 @@ object OriaServerPlayerEntity {
                 )
             )
         }
-        val inv: Inventory = player.enderChestInventory
+        val inv = player.enderChestInventory
         for (i in 0 until inv.size()) {
             handleStack(player, inv.getStack(i))
         }

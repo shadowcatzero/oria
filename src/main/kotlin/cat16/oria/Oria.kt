@@ -1,11 +1,9 @@
 package cat16.oria
 
 import cat16.oria.block.OriaBlocks
-import cat16.oria.component.OriaComponents
 import cat16.oria.entity.OriaEntities
 import cat16.oria.item.OriaItems
 import cat16.oria.recipe.OriaRecipes
-import cat16.oria.world.OriaBiomeHandler
 import net.fabricmc.api.ModInitializer
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -18,7 +16,6 @@ object Oria : ModInitializer {
         OriaBlocks.init()
         OriaEntities.init()
         OriaItemGroups.init()
-        OriaBiomeHandler.init()
         OriaRecipes.init()
     }
 

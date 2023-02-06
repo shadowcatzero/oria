@@ -4,7 +4,8 @@ import cat16.oria.Oria
 import net.minecraft.recipe.Recipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialRecipeSerializer
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
 
 object OriaRecipes {
 
@@ -19,7 +20,7 @@ object OriaRecipes {
         serializer: S
     ): S {
         return Registry.register(
-            Registry.RECIPE_SERIALIZER,
+            Registries.RECIPE_SERIALIZER,
             Oria.id(id),
             serializer
         )

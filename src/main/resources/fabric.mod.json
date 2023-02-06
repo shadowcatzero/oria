@@ -30,7 +30,10 @@
       }
     ],
     "cardinal-components": [
-      "cat16.oria.component.OriaComponents"
+      {
+        "value": "cat16.oria.component.OriaComponents",
+        "adapter": "kotlin"
+      }
     ]
   },
   "mixins": [
