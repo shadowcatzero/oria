@@ -1,6 +1,6 @@
 package cat16.oria.item.tool
 
-import cat16.oria.entity.bomb.BombEntity
+import cat16.oria.entity.bomb.PotionBombEntity
 import cat16.oria.item.OriaItem
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -12,10 +12,10 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 import kotlin.random.Random
 
-class BombItem(settings: Settings) : Item(settings), OriaItem {
+class PotionBombItem(settings: Settings) : Item(settings), OriaItem {
     constructor() : this(Settings())
 
-    override val oriaName: String = "bomb"
+    override val oriaName: String = "potion_bomb"
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val stack = user.getStackInHand(hand)
@@ -32,11 +32,11 @@ class BombItem(settings: Settings) : Item(settings), OriaItem {
         )
 
         if (!world.isClient) {
-            val bombEntity = BombEntity(world)
-            bombEntity.updatePosition(user.x, user.eyeY - 0.1, user.z)
-            bombEntity.launchFrom(user, user.pitch, user.yaw, user.roll.toFloat(), 0.3)
-            bombEntity.fuse = stack.nbt?.getString("fuse")
-            world.spawnEntity(bombEntity)
+            val potionBombEntity = PotionBombEntity(world)
+            potionBombEntity.updatePosition(user.x, user.eyeY - 0.1, user.z)
+            potionBombEntity.launchFrom(user, user.pitch, user.yaw, user.roll.toFloat(), 0.3)
+            potionBombEntity.fuse = stack.nbt?.getString("fuse")
+            world.spawnEntity(potionBombEntity)
         }
 
         if (!user.abilities.creativeMode) {

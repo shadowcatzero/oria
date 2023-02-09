@@ -37,7 +37,7 @@ class BombRecipe(identifier: Identifier, category: CraftingRecipeCategory) : Spe
             if(item is FuseItem) fuse = item
         }
         return if(fuse != null) {
-            val bomb = ItemStack(OriaItems.BOMB)
+            val bomb = ItemStack(OriaItems.POTION_BOMB)
             bomb.orCreateNbt.putString("fuse", fuse.fuseName)
             bomb
         } else ItemStack.EMPTY

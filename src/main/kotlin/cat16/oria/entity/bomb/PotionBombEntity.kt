@@ -17,17 +17,16 @@ import net.minecraft.util.TypeFilter
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.GameRules
 import net.minecraft.world.World
-import net.minecraft.world.explosion.Explosion
 import software.bernie.geckolib.animatable.GeoEntity
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager
 import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.function.Consumer
 
-class BombEntity(type: EntityType<BombEntity>, world: World) :
+class PotionBombEntity(type: EntityType<PotionBombEntity>, world: World) :
     Entity(type, world), GeoEntity {
 
-    var rollDistance = 0f;
+    private var rollDistance = 0f;
     var fuse: String? = null
     var ticks: Int = 0
 
@@ -40,7 +39,7 @@ class BombEntity(type: EntityType<BombEntity>, world: World) :
     }
 
     companion object : OriaEntityInfo {
-        override val oriaName: String = "bomb"
+        override val oriaName: String = "potion_bomb"
         override val dimensions: EntityDimensions = EntityDimensions.fixed(0.4f, 0.4f)
         override val spawnGroup: SpawnGroup = SpawnGroup.MISC
     }

@@ -1,8 +1,8 @@
 package cat16.oria.entity
 
 import cat16.oria.Oria
-import cat16.oria.entity.bomb.BombEntity
-import cat16.oria.entity.bomb.BombEntityRenderer
+import cat16.oria.entity.bomb.PotionBombEntity
+import cat16.oria.entity.bomb.PotionBombEntityRenderer
 import cat16.oria.entity.rat.RatEntity
 import cat16.oria.entity.rat.RatEntityRenderer
 import cat16.oria.entity.tntMinion.TntMinionEntity
@@ -15,9 +15,6 @@ import net.minecraft.entity.EntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.world.World
-import net.minecraft.world.biome.Biome
-
-typealias ETPair<E> = Pair<EntityType<out E>, EntityRendererFactory<out E>>
 
 object OriaEntities {
     private val toRegister: MutableList<() -> Unit> = mutableListOf()
@@ -26,7 +23,7 @@ object OriaEntities {
 
     val RAT = register(::RatEntity, RatEntity.Companion, ::RatEntityRenderer)
     val TNT_MINION = register(::TntMinionEntity, TntMinionEntity.Companion, ::TntMinionEntityRenderer)
-    val BOMB = register(::BombEntity, BombEntity.Companion, ::BombEntityRenderer)
+    val BOMB = register(::PotionBombEntity, PotionBombEntity.Companion, ::PotionBombEntityRenderer)
 
 
 
